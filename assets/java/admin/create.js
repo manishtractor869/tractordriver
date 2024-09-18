@@ -4,8 +4,8 @@ const body = document.querySelector("body"),
             modeToggle = document.querySelector(".dark-light"),
             searchBox = document.querySelector(".searchBox"),
             open = document.querySelector(".open"),
-            close = document.querySelector(".close"),
-            arrowTop = document.querySelector(".arrowTop");
+            close = document.querySelector(".close");
+
 
         // nav bar scroll up and down with windows
 
@@ -64,3 +64,37 @@ const body = document.querySelector("body"),
                 searchBox.classList.remove("active");
             }
         })
+
+        //header closed
+        //end of header
+
+        // Function to handle form submission
+        document.getElementById('sheetForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var form = document.getElementById('sheetForm');
+            var sheetName = form.sheetName.value;
+
+            // Make an HTTP POST request to the Google Apps Script web app
+            fetch('https://script.google.com/macros/s/AKfycbwMff7Vv0Gco92Q_7cXy2tX3-igcwAmV_8-eMQgPJ-LxWhvl3pt9WIt6YlYhRNot_DsrQ/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({
+                    'sheetName': sheetName
+                })
+            })
+                .then(response => response.text())
+                .then(result => {
+                    // Display the result in the div and show an alert
+                    document.getElementById('result').innerText = result;
+                    alert(result);
+                    window.location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('result').innerText = 'An error occurred.';
+                    alert('An error occurred.');
+                    window.location.reload();
+                });
+        });
